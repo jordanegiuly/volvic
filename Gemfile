@@ -20,6 +20,8 @@ group :assets do
   gem 'uglifier'
 end
 
+gem 'pg'
+
 gem 'jquery-rails'
 
 gem 'twitter', "~> 5.7.1"
