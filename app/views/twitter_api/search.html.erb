@@ -1,0 +1,45 @@
+<h1>Result size: <%= @tweets.size %></h1>
+
+<h2>Summary</h2>
+<table>
+	<tr>
+		<td>Links: <%= @links.size%></td>
+		<td>Tags: <%= @tags.size%></td>	
+	</tr>
+	
+	<tr>
+		<td>
+			<% @links.each do |k, v| %>
+			<div>Link: <%= link_to k, k, :target =>"_blank" %>, count: <%= v %></div>
+			<% end %>
+		</td>
+		
+		<td>
+			<% @tags.each do |k, v| %>
+			<div>Tag: <%= k %>, count: <%= v %></div>
+			<% end %>
+		</td>		
+	</tr>
+	
+	
+</table>
+
+<h2>Complete array</h2>
+
+<table>
+<tr>
+  <td>Tweet</td>
+  <td>Link</td> 
+  <td>Tag</td>
+</tr>
+
+<% @tweets.each do |tweet| %>
+<tr> 
+	<td><%= tweet["tweet"] %></td>
+	<td><%= tweet["links"] %></td>
+	<td><%= tweet["tags"] %></td>	
+</tr>
+<% end %>
+
+
+
