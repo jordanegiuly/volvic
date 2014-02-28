@@ -35,7 +35,8 @@ gem "shortener"
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn'
+gem "unicorn-rails"
 
 # Deploy with Capistrano
 # gem 'capistrano'
