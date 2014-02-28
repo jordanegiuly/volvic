@@ -1,6 +1,7 @@
 class TwitterApiController < ApplicationController
   
   def index
+    render stream: true
   end
   
   def search
@@ -8,6 +9,6 @@ class TwitterApiController < ApplicationController
     @tweets = Tweet.stream
     @links = Tweet.link_list(@tweets)
     @tags = Tweet.tag_list(@tweets)
-    # render stream: true
+    render stream: true
   end
 end
