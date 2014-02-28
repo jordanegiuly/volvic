@@ -3,14 +3,12 @@
     <div class="vert-text">
         <h1>Press Review</h1>
         <h3>Enter your brand name</h3>
-		<form class="navbar-form" role="search">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="#MyBrand">
-			</div>
-			<button type="submit" class="btn btn-warning">Search !</button>
-		</form>	
+		
+		<%= form_tag("twitter_api/search", method: "get", :class =>"navbar-form") do %>		  
+		  <div class="form-group">
+		  <%= text_field_tag :search_tag, "", class: "form-control", placeholder: "#MyBrand" %>
+		  </div>
+		  <%= submit_tag "Search !", class: "btn btn-warning" %>
+		<% end %>
     </div>
 </div>
-
-        
-
