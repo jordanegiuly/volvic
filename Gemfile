@@ -26,6 +26,11 @@ gem 'jquery-rails'
 
 gem 'twitter', "~> 5.7.1"
 
+# gems for styles
+gem "font-awesome-rails"
+gem "therubyracer"
+gem "less-rails"
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
