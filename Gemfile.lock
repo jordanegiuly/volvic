@@ -87,8 +87,6 @@ GEM
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
       sprockets-rails (~> 2.0.0)
-    shortener (0.3.0)
-      rails (>= 3.0.7)
     simple_oauth (0.2.0)
     sprockets (2.11.0)
       hike (~> 1.2)
@@ -139,7 +137,6 @@ DEPENDENCIES
   pg
   rails
   sass-rails
-  shortener
   sqlite3
   twitter (~> 5.7.1)
   uglifier

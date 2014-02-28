@@ -17,13 +17,13 @@ class Tweet < ActiveRecord::Base
   end
   
   
-  def self.stream
+  def self.stream(tag)
     client = Tweet.initialize_client
     tweets = []
     
     print "\nBEGIN TWITTER API QUERY \n"
     print "======================= \n"
-    twitter_api_result = client.search("#criteo", :result_type => "recent").take(50)
+    twitter_api_result = client.search(tag, :result_type => "recent").take(20)
     print "END TWITTER API QUERY \n"
     
     print "\n======================= \n"

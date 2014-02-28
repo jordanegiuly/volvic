@@ -1,14 +1,12 @@
 class TwitterApiController < ApplicationController
-  
-  def index
-    render stream: true
+ 
+  def index    
   end
-  
+
   def search
     @search_tag = params[:search_tag]
-    @tweets = Tweet.stream
+    @tweets = Tweet.stream(@search_tag)
     @links = Tweet.link_list(@tweets)
     @tags = Tweet.tag_list(@tweets)
-    render stream: true
   end
 end

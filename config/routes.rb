@@ -50,6 +50,7 @@ Project::Application.routes.draw do
   # just remember to delete public/index.html.
   get "twitter_api/index"
   get "twitter_api/search"
+  get "twitter_api/events"
   
   root 'twitter_api#index'
   # See how all your routes lay out with "rake routes"

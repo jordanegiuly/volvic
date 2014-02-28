@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require bootstrap.min
- *= require stylish-portfolio.css
+ *= require stylish-portfolio
+ *= require sb-admin
  *= require_tree .
  */

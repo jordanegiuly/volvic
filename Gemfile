@@ -26,8 +26,6 @@ gem 'jquery-rails'
 
 gem 'twitter', "~> 5.7.1"
 
-gem "shortener"
-
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -36,7 +34,8 @@ gem "shortener"
 
 # Use unicorn as the app server
 gem 'unicorn'
-gem "unicorn-rails"
+gem 'unicorn-rails'
+
 
 # Deploy with Capistrano
 # gem 'capistrano'
