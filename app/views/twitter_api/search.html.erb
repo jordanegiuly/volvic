@@ -58,9 +58,6 @@ function urls_to_articles(dom_id){
 	var completed_url_list = {};
 	var article_count = 0;
 	var cur_article = $(dom_id);
-	var article = <%= raw @diffbot_api_response %>;
-	
-	console.log(article);
 	
 	$.each(tweets, function(i, tweet) {
 		for (var i=0,len=tweet.urls.length; i<len; i++){
