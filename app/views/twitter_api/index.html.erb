@@ -12,3 +12,22 @@
 		<% end %>
     </div>
 </div>
+
+<div id="test"></div>
+
+<script>
+$(document).ready(function() {
+	//diffbot_api_call();
+});
+
+function diffbot_api_call(){
+$.ajax({
+	url: "http://api.diffbot.com/v2/article",
+	context: document.body,
+	data: { token : "eecf536c1f7d84030c6eabea9ad4e134", url: "http://dlvr.it/51TcN0" }
+}).done(function(data) {
+	console.log(data);
+	$.post('/diffbot_api/create', {url: "http://dlvr.it/51TcN0", response: JSON.stringify(data)});
+});
+}
+</script>

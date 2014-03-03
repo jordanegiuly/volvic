@@ -20,29 +20,41 @@ class Tweet < ActiveRecord::Base
   def self.stream(tag)
     client = Tweet.initialize_client
     tweets = []
+    twitter_api_result = client.search(tag, :result_type => "recent").take(50)
     
-    print "\nBEGIN TWITTER API QUERY \n"
-    print "======================= \n"
-    twitter_api_result = client.search(tag, :result_type => "recent").take(20)
-    print "END TWITTER API QUERY \n"
-    
-    print "\n======================= \n"
-    print "BEGIN PROCESS TWEETS: \n"
     twitter_api_result.each do |tweet|
       tweet = Tweet.process_tweet(tweet)
       tweets << tweet
     end
-    print "END PROCESS TWEET \n"   
     return tweets
   end
   
   
   def self.process_tweet(tweet)
     result = {}
-    links = Tweet.find_link(tweet.text)
-    tags = Tweet.find_tags(tweet.text)    
-    result = {"tweet" => tweet.text, "links" => links, "tags" => tags}
-  end  
+    urls = Tweet.expand_urls(tweet.uris)
+    tags = Tweet.extract_tags(tweet.hashtags)
+    processed_tweet = {"created_at" => tweet.created_at, "user" => tweet.user.screen_name, 
+              "text" => tweet.text, "urls" => urls, "tags" => tags}
+  end
+  
+  
+  def self.expand_urls(urls)
+    expanded_urls = []
+    urls.each do |entity|
+      expanded_urls << entity.attrs[:expanded_url]
+    end
+    return expanded_urls
+  end
+  
+  
+  def self.extract_tags(hashtags)
+    tags = []
+    hashtags.each do |entity|
+      tags << entity.attrs[:text]
+    end
+    return tags
+  end
   
   
   def self.link_list(tweets)
