@@ -14,26 +14,6 @@
 <h1>Number of articles found: <em id="number_of_articles_found">...</em></h1>
 </div>
 
-<div class="row">
-	<div class="col-lg-6 col-md-6 portfolio-item">
-        <a href="<%= @diffbot_api_response["resolved_url"] %>", target="_blank">
-        	<% if @diffbot_api_response["images"].size > 0 %>
-            	<img class="img-responsive" src="<%= @diffbot_api_response["images"][0]["url"] %>">
-            <% else %>
-            	<img class="img-responsive" src="http://placehold.it/700x400">
-            <% end %>
-        </a>
-        <h3><a href="<%= @diffbot_api_response["resolved_url"] %>", target="_blank"><%= @diffbot_api_response["title"] %></a>
-        </h3>
-        <p class="lead">by <%= @diffbot_api_response["author"] %></p>
-        <hr />
-        <p><span class="glyphicon glyphicon-time"></span> Posted on <%= @diffbot_api_response["date"] %></p>
-        <p>Url: <%= link_to @diffbot_api_response["resolved_url"] %></p>
-        <hr />
-        <p style="text-align: justify;"><%= @diffbot_api_response["text"].truncate(500) %></p>
-    </div>
-</div>
-
 <div id="test">
 </div>
 
@@ -70,29 +50,60 @@ $(document).ready(function() {
 	$('#complete').dataTable({
 		"bAutoWidth": false
 	});
+	urls_to_articles("#test");
+});
+
+function urls_to_articles(dom_id){
 	var tweets = <%= raw @tweets.to_json %>;
 	var completed_url_list = {};
+	var article_count = 0;
+	var cur_article = $(dom_id);
+	var article = <%= raw @diffbot_api_response %>;
+	
+	console.log(article);
+	
 	$.each(tweets, function(i, tweet) {
-	  complete_url_list(completed_url_list, tweet.urls);
+		for (var i=0,len=tweet.urls.length; i<len; i++){
+			var url = tweet.urls[i];
+			var is_present = (url in completed_url_list);
+			if (is_present) {
+				completed_url_list[url] += 1;
+			} else {
+				completed_url_list[url] = 1;
+				$.ajax({
+					url: "http://api.diffbot.com/v2/article",
+					context: document.body,
+					data: { token : "eecf536c1f7d84030c6eabea9ad4e134", url: url }
+				}).done(function(data) {
+					if (article_count % 2 == 0) { cur_article = $('<div class="row"></div>').appendTo('#test'); }
+					console.log(data);
+					cur_article = cur_article.append(article_template(data));
+					article_count += 1;
+					$('#number_of_articles_found').html(article_count);
+				});
+			}
+		}
 	});
 	
-	$('#number_of_articles_found').html(Object.keys(completed_url_list).length);
-} );
-
-function complete_url_list(completed_url_list, urls){
-	for (var i=0,len=urls.length; i<len; i++){
-		url = urls[i];
-		var is_present;
-		if (url in completed_url_list) {
-			is_present = true;
-			completed_url_list[url] += 1;
-		}
-		else {
-			is_present = false;
-			completed_url_list[url] = 1;
-			$("#test").append("<p> "+ url + " </p>");
-		}
-	}
 }
+
+function article_template(article){
+	var template = '<div class="col-lg-6 col-md-6 portfolio-item">';
+    template += '<a href="' + article["resolved_url"] + '", target="_blank">';
+    if (typeof article["images"] === "undefined" || article["images"].length == 0) {
+    	template +='<img class="img-responsive" src="http://placehold.it/700x400">';
+    } else {
+    	template += '<img class="img-responsive" src="'+ article["images"][0]["url"] + '">';
+    }
+    template += '</a>';
+    template += '<h3><a href="' + article["resolved_url"] + '", target="_blank">' + article["title"] + '</a></h3>'; 
+    template += '<p class="lead">by ' + article.author + ' </p> <hr />';
+    template += '<p><span class="glyphicon glyphicon-time"></span> Posted on ' + article["date"] + '</p>';
+    template += '<p>Url: ' + article["url"] + '</p><hr />';
+    template += '<p style="text-align: justify;">' + article["text"].substring(0,500); + '</p>';
+    template += '</div>'
+    return template
+}
+
 </script>
 </div>

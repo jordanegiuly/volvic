@@ -1,0 +1,17 @@
+<div class="col-lg-6 col-md-6 portfolio-item">
+    <a href="<%= article["resolved_url"] %>", target="_blank">
+    	<% if article["images"].size > 0 %>
+        	<img class="img-responsive" src="<%= article["images"][0]["url"] %>">
+        <% else %>
+        	<img class="img-responsive" src="http://placehold.it/700x400">
+        <% end %>
+    </a>
+    <h3><a href="<%= article["resolved_url"] %>", target="_blank"><%= article["title"] %></a>
+    </h3>
+    <p class="lead">by <%= article["author"] %></p>
+    <hr />
+    <p><span class="glyphicon glyphicon-time"></span> Posted on <%= article["date"] %></p>
+    <p>Url: <%= link_to article["resolved_url"] %></p>
+    <hr />
+    <p style="text-align: justify;"><%= article["text"].truncate(500) %></p>
+</div>
