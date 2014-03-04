@@ -1,0 +1,100 @@
+
+<div class="page-header">
+	<h1>Number of articles found: <em id="number_of_articles_found">...</em></h1>
+</div>
+
+<div id="articles_list"></div>
+
+<script>
+var dom_id = "#articles_list";
+var short_urls = <%= raw @short_urls %>;
+var short_urls_map = {};
+var article_count = 0;
+var cur_article = $(dom_id);
+var url;
+
+$(document).ready(function() {
+	display_articles();
+});
+
+
+function display_articles(){
+	if (articles_are_processed) {
+		for(var k in articles) {
+    		display_article(articles[k]["data"]);
+		}
+	}
+	else {
+		process_articles(0);
+	}
+}
+
+function process_articles(i){
+	if (i >= short_urls.length) { 
+		console.log("ARTICLES: ");
+		console.log(articles);
+		articles_are_processed = true;
+		$('#number_of_articles_found').append('<small style="padding-left: 20px;">Done</small>');
+		return ;
+	}
+	
+	url = short_urls[i]; // we retrieve the short url
+	if (url in short_urls_map) { //if the short url has already been processed
+		console.log(url + " is already in.");
+		articles[short_urls_map[url]]["count"] += 1; //we add a count to the article list
+		process_articles(i+1);
+	} else { //we process the ajax request to DIffbot API 
+		ajax_request(i);
+	}	
+}
+
+function ajax_request(i){
+	$.ajax({
+		url: "http://api.diffbot.com/v2/article",
+		context: document.body,
+		data: { token : "eecf536c1f7d84030c6eabea9ad4e134", url: url }
+	})
+	.done(function(article) {
+		found_url = article["resolved_url"] || url ;
+		short_urls_map[url] = found_url ;
+
+		if (found_url in articles) {
+			console.log(found_url + ' is already in');
+			articles[found_url]["count"] += 1;
+		}
+		else {
+			console.log(found_url);
+			console.log(article);
+			articles[found_url] = { count: 1, data: article};
+			
+			display_article(article); // we display the article
+			//$.post('/diffbot_api/create', {url: url, response: JSON.stringify(data)});
+		}
+		process_articles(i+1);
+	});
+}
+
+function display_article(article){
+	if (article_count % 2 == 0) { cur_article = $('<div class="row"></div>').appendTo(dom_id); }	
+	
+	var template = '<div class="col-lg-6 col-md-6 portfolio-item">';
+    template += '<a href="' + article["resolved_url"] + '", target="_blank">';
+    if (typeof article["images"] === "undefined" || article["images"].length == 0) {
+    	template +='<img class="img-responsive" src="http://placehold.it/700x400">';
+    } else {
+    	template += '<img class="img-responsive" src="'+ article["images"][0]["url"] + '">';
+    }
+    template += '</a>';
+    template += '<h3><a href="' + article["resolved_url"] + '", target="_blank">' + article["title"] + '</a></h3>'; 
+    template += '<p class="lead">by ' + article.author + ' </p> <hr />';
+    template += '<p><span class="glyphicon glyphicon-time"></span> Posted on ' + article["date"] + '</p>';
+    template += '<p>Url: ' + article["url"] + '</p><hr />';
+    template += '<p style="text-align: justify;">' + article["text"].substring(0,500); + '</p>';
+    template += '</div>';
+    
+    cur_article = cur_article.append(template);
+    article_count += 1;
+	$('#number_of_articles_found').html(article_count);
+}
+	
+</script>

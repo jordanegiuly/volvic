@@ -20,31 +20,31 @@ class Tweet < ActiveRecord::Base
   def self.stream(tag)
     client = Tweet.initialize_client
     tweets = []
+    urls = []
     twitter_api_result = client.search(tag, :result_type => "recent").take(50)
     
     twitter_api_result.each do |tweet|
+      extract_urls(urls, tweet.uris)
       tweet = Tweet.process_tweet(tweet)
       tweets << tweet
     end
-    return tweets
+    return {"tweets" => tweets, "short_urls" => urls }
   end
   
   
   def self.process_tweet(tweet)
     result = {}
-    urls = Tweet.expand_urls(tweet.uris)
     tags = Tweet.extract_tags(tweet.hashtags)
     processed_tweet = {"created_at" => tweet.created_at, "user" => tweet.user.screen_name, 
-              "text" => tweet.text, "urls" => urls, "tags" => tags}
+                       "text" => tweet.text, "tags" => tags}
   end
   
   
-  def self.expand_urls(urls)
-    expanded_urls = []
-    urls.each do |entity|
-      expanded_urls << entity.attrs[:expanded_url]
+  def self.extract_urls(urls, tweet_uris)
+    tweet_uris.each do |entity|
+      urls << entity.attrs[:url]
     end
-    return expanded_urls
+    return urls
   end
   
   
@@ -73,10 +73,10 @@ class Tweet < ActiveRecord::Base
     tags = {}
     tweets.each do |tweet|
       tweet["tags"].each do |tag|
+        tag = tag.downcase
         tags[tag] = tags[tag] ? tags[tag] + 1 : 1
       end
     end
-    tags = Hash[tags.sort_by{|k, v| v}.reverse]
     return tags
   end
 
