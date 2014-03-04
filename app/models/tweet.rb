@@ -21,7 +21,7 @@ class Tweet < ActiveRecord::Base
     client = Tweet.initialize_client
     tweets = []
     urls = []
-    twitter_api_result = client.search(tag, :result_type => "recent").take(10)
+    twitter_api_result = client.search(tag, :result_type => "recent").take(50)
     
     twitter_api_result.each do |tweet|
       extract_urls(urls, tweet.uris)
