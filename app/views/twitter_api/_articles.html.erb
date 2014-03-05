@@ -9,9 +9,7 @@
 </div>
 
 <div class="row">
-	<div class="col-md-1">
-	</div>
-	<div class="col-md-10">
+	<div class="col-md-11">
 		<div class="progress progress-striped active" style="margin-top: 10px; margin-bottom: 10px;">
 			<div id="articles_progress-bar" class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
 				<span class="sr-only">0% Complete</span>
@@ -51,6 +49,8 @@ $(document).ready(function() {
 
 function display_articles(){
 	if (articles_are_processed) {
+		$("#kill_diffbot_request_button").addClass( "disabled" );
+		$("#order_by_relevance_button").removeClass( "disabled" );
 		for(var k in articles) {
 			display_article(articles[k]["data"]);
 		}
@@ -59,26 +59,21 @@ function display_articles(){
 	else {
 		process_articles(0);
 	}
-	$("#kill_diffbot_request_button").addClass( "disabled" );
-	$("#order_by_relevance_button").removeClass( "disabled" );
 }
 
 function process_articles(i){
+	
 	processed_articles = i;
 	update_progress_bar(short_urls_count, processed_articles);
 	
-	if (kill_diffbot_request) {
-		console.log("REQUEST ABORDED !");
-		console.log(articles);
-		articles_are_processed = true;
-		return ;
-	}
-	
-	if (i >= short_urls_count) { 
+	if ((kill_diffbot_request) || (i >= short_urls_count)) { 
+		if (kill_diffbot_request) {console.log("REQUEST ABORDED !");}
 		console.log("ARTICLES: ");
 		console.log(articles);
 		articles_are_processed = true;
 		if (store_in_db) $.post('/diffbot_api/create', {url: "research", response: JSON.stringify(articles)});
+		$("#kill_diffbot_request_button").addClass( "disabled" );
+		$("#order_by_relevance_button").removeClass( "disabled" );
 		return ;
 	}
 
@@ -107,8 +102,7 @@ function ajax_request(i){
 			articles[found_url]["count"] += 1;
 		}
 		else {
-			console.log(found_url);
-			console.log(article);
+			console.log("new article: " + found_url);
 			articles[found_url] = { count: 1, data: article};
 			
 			display_article(article); // we display the article
