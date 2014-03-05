@@ -9,6 +9,6 @@ class TwitterApiController < ApplicationController
     search_results ||= {"tweets" => [], "short_urls" => []}
     @tweets = search_results["tweets"]
     @short_urls = search_results["short_urls"]
-    @articles = DiffbotApi.last.response
+    #@articles = DiffbotApi.last.response
   end
 end
