@@ -24,6 +24,8 @@ class Tweet < ActiveRecord::Base
     twitter_api_result = client.search(tag, :result_type => "recent").take(count)
     
     twitter_api_result.each do |tweet|
+      print "Tweet: \n"
+      print tweet.uris
       extract_urls(urls, tweet.uris)
       tweet = Tweet.process_tweet(tweet)
       tweets << tweet

@@ -1,26 +1,50 @@
 
 <div class="page-header">
-	<h1>Articles found: <em id="articles_count">0</em></h1>
+	<h1>Articles found: <em id="articles_count">0</em>
+		
+		<button id="order_by_relevance_button" type="button" class="btn btn-default pull-right disabled" data-toggle="tooltip" data-placement="top" title="Order by relevance" style="margin-top: 3px;">
+			<span class="glyphicon glyphicon-chevron-up"></span>
+		</button>
+	</h1>
 </div>
 
-<div class="progress progress-striped active">
-  <div id="articles_progress-bar" class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-    <span class="sr-only">0% Complete</span>
-  </div>
+<div class="row">
+	<div class="col-md-1">
+	</div>
+	<div class="col-md-10">
+		<div class="progress progress-striped active" style="margin-top: 10px; margin-bottom: 10px;">
+			<div id="articles_progress-bar" class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+				<span class="sr-only">0% Complete</span>
+		  	</div>
+		</div>
+	</div>
+	<div class="col-md-1">
+		<button id="kill_diffbot_request_button" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="top" title="Stop" style="margin-top: 3px;">
+			<span class="glyphicon glyphicon-remove"></span>
+		</button>
+	</div>	
 </div>
 
 <div id="articles_list"></div>
 
 <script>
-var dom_id = "#articles_list";
 var short_urls = <%= raw @short_urls %>;
 var short_urls_count = short_urls.length;
 var short_urls_map = {};
-var article_count = 0;
-var cur_article = $(dom_id);
+var articles_count = 0;
 var url;
+var kill_diffbot_request = false;
 
 $(document).ready(function() {
+	$('.btn').tooltip();
+	$("#kill_diffbot_request_button").click(function() {
+  		kill_diffbot_request = true;
+  		$("#kill_diffbot_request_button").addClass( "disabled" );
+	});
+	$("#order_by_relevance_button").click(function() {
+  		order_articles_by_relevance();
+  		$("#order_by_relevance_button").addClass( "disabled" );
+	});
 	display_articles();
 });
 
@@ -28,27 +52,36 @@ $(document).ready(function() {
 function display_articles(){
 	if (articles_are_processed) {
 		for(var k in articles) {
-    		display_article(articles[k]["data"]);
+			display_article(articles[k]["data"]);
 		}
-		update_progress_bar(1, 1);
+		update_progress_bar(short_urls_count, processed_articles);
 	}
 	else {
 		process_articles(0);
 	}
+	$("#kill_diffbot_request_button").addClass( "disabled" );
+	$("#order_by_relevance_button").removeClass( "disabled" );
 }
 
 function process_articles(i){
+	processed_articles = i;
+	update_progress_bar(short_urls_count, processed_articles);
+	
+	if (kill_diffbot_request) {
+		console.log("REQUEST ABORDED !");
+		console.log(articles);
+		articles_are_processed = true;
+		return ;
+	}
+	
 	if (i >= short_urls_count) { 
 		console.log("ARTICLES: ");
 		console.log(articles);
 		articles_are_processed = true;
-		update_progress_bar(1, 1);
 		if (store_in_db) $.post('/diffbot_api/create', {url: "research", response: JSON.stringify(articles)});
 		return ;
 	}
-	
-	update_progress_bar(short_urls_count, i);
-	
+
 	url = short_urls[i]; // we retrieve the short url
 	if (url in short_urls_map) { //if the short url has already been processed
 		console.log(url + " is already in.");
@@ -85,31 +118,50 @@ function ajax_request(i){
 }
 
 function display_article(article){
-	if (article_count % 2 == 0) { cur_article = $('<div class="row"></div>').appendTo(dom_id); }	
 	
-	var template = '<div class="col-lg-6 col-md-6 portfolio-item">';
-    template += '<a href="' + article["resolved_url"] + '", target="_blank">';
-    if (typeof article["images"] === "undefined" || article["images"].length == 0) {
-    	template +='<img class="img-responsive" src="http://placehold.it/700x400">';
+	var template ='<hr ><div class="media">';
+	template	+='<a class="pull-left" href="' + article["resolved_url"]+'", target="_blank"">'
+  				+ '<img class="media-object" data-src="holder.js/64x64" alt="64x64" src="';
+  	
+  	if (typeof article["images"] === "undefined" || article["images"].length == 0) {
+    	template +='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIj48L3JlY3Q+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+';
     } else {
-    	template += '<img class="img-responsive" src="'+ article["images"][0]["url"] + '">';
+    	template += article["images"][0]["url"];
     }
-    template += '</a>';
-    template += '<h3><a href="' + article["resolved_url"] + '", target="_blank">' + article["title"] + '</a></h3>'; 
-    template += '<p class="lead">by ' + article.author + ' </p> <hr />';
-    template += '<p><span class="glyphicon glyphicon-time"></span> Posted on ' + article["date"] + '</p>';
-    template += '<p>Url: ' + article["url"] + '</p><hr />';
-    template += '<p style="text-align: justify;">' + article["text"].substring(0,500); + '</p>';
-    template += '</div>';
+	
+  	template	+='" style="width: 64px; height: 64px;">'
+  				+ '</a>'
+  			 	+ '<div class="media-body">'
+  			 	+ '<a href="' + article["resolved_url"]+'", target="_blank"">'
+  			 	+ '<h4 class="media-heading">'+ article["title"] +'</h4>'
+    		 	+ '</a>'
+    		 	+ '<em> Posted on '+ article["date"] + ', by ' + article["author"] + ' </em>'
+    		 	+ '<p>' + article["text"].substring(0,500); + '</p>'
+    		 	+ '</div></div>';
     
-    cur_article = cur_article.append(template);
-    article_count += 1;
-	$('#articles_count').html(article_count);
+    articles_count += 1;
+    $("#articles_list").append(template);
+	$('#articles_count').html(articles_count);
 }
 
 function update_progress_bar(size, i){
-	valeur = i * 100 / size;
+	var valeur = 100;
+	if (size != 0) { valeur = i * 100 / size; } 
+	
 	$('#articles_progress-bar').css('width', valeur+'%').attr('aria-valuenow', valeur);	
 }
+
+function order_articles_by_relevance(){
+	$('#articles_list').html("");
+	articles_count = 0;
 	
+	var sorted_articles = [];
+    for (var k in articles) sorted_articles.push([articles[k]["count"], articles[k]["data"]]);
+
+    sorted_articles.sort(function(a, b) { return a[0] < b[0] ? 1 : a[0] > b[0] ? -1 : 0 });
+	
+	for(var k in sorted_articles) {
+		display_article(sorted_articles[k][1]);
+	}
+}
 </script>
