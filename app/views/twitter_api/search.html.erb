@@ -14,6 +14,8 @@
             <li id="articles_partial"><a href="#">List of articles</a></li>
             <li id="twitter_partial"><a href="#">Twitter</a></li>
             <li id="tags_partial"><a href="#">Tags</a></li>
+            <li id="medias_partial"><a href="#">Medias</a></li>
+            <li id="authors_partial"><a href="#">Authors</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -41,8 +43,14 @@
 </div>
 
 <script>
+
 var articles = {};
-var articles_are_processed = false;
+var articles_are_processed = false; //set to false
+
+//articles = <%= raw @articles %>; // to comment
+//console.log(articles); // to comment
+var store_in_db = false;
+
 $(document).ready(function() {
 	navigation();
 });
@@ -57,5 +65,11 @@ function navigation(){
 	$( "#tags_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'tags') %>");
 	});	
+	$( "#medias_partial" ).click(function() {
+  		$("#search_result").html("<%= escape_javascript(render partial: 'medias') %>");
+	});
+	$( "#authors_partial" ).click(function() {
+  		$("#search_result").html("<%= escape_javascript(render partial: 'authors') %>");
+	});
 }
 </script>

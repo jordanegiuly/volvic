@@ -17,11 +17,11 @@ class Tweet < ActiveRecord::Base
   end
   
   
-  def self.stream(tag)
+  def self.stream(tag, count)
     client = Tweet.initialize_client
     tweets = []
     urls = []
-    twitter_api_result = client.search(tag, :result_type => "recent").take(50)
+    twitter_api_result = client.search(tag, :result_type => "recent").take(count)
     
     twitter_api_result.each do |tweet|
       extract_urls(urls, tweet.uris)
@@ -71,13 +71,15 @@ class Tweet < ActiveRecord::Base
   
   def self.tag_list(tweets)
     tags = {}
+    tags_count = 0
     tweets.each do |tweet|
       tweet["tags"].each do |tag|
         tag = tag.downcase
         tags[tag] = tags[tag] ? tags[tag] + 1 : 1
+        tags_count += 1
       end
     end
-    return tags
+    return { "tags_count" => tags_count, "tags" => tags }
   end
 
 

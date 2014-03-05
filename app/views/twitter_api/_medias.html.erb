@@ -1,0 +1,66 @@
+<div class="page-header">
+	<h1>Medias found: <em id="medias_count">0</em></h1>
+</div>
+
+<table id="medias_table" class="table table-striped table-bordered table-hover dataTable no-footer">
+	<thead>
+		<tr>
+		  <th>Media</th>
+		  <th>Count</th>
+		  <th style="min-width: 200px;">Proportion</th>
+		</tr>
+	</thead>
+	
+	<tbody id="medias_table_body">
+	</tbody>
+</table>
+
+<script>
+
+var medias = {};
+
+$(document).ready(function() {
+	
+	process_medias();
+	
+	$('#medias_table').dataTable({
+		"bAutoWidth": false,
+		"aaSorting": [[ 1, "desc" ]],
+	});
+});
+
+function process_medias(){
+	var medias_count = 0;
+	var weighted_medias_count = 0;
+	for(var k in articles) {
+    	var host = parseUri(k).host;
+    	if (host in medias) {
+    		medias[host] += articles[k]["count"];
+    	} else {
+    		medias[host] = articles[k]["count"];
+    		medias_count += 1;
+    	}
+    	weighted_medias_count += articles[k]["count"];
+	}
+
+	for(var k in medias){
+		var template = '<tr>';
+		template += '<td>' + k + '</td>';
+		template += '<td>'+ medias[k] + '</td>';
+		template += '<td> <div class="progress">';
+		template +=	'<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' 
+				 + (medias[k]*100 / weighted_medias_count) 
+				 + '" aria-valuemin="0" aria-valuemax="100" style="width: '
+				 + (medias[k]*100 / weighted_medias_count) 
+				 + '%;"><span class="sr-only">'
+				 + (medias[k]*100 / weighted_medias_count) 
+				 + '% Complete</span></div>';
+		template +=	'</div></td>';
+		template += '</tr>';
+		
+		$("#medias_table_body").append(template);
+		
+	}
+	$("#medias_count").html(medias_count);
+}
+</script>

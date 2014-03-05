@@ -1,8 +1,9 @@
 <% tags = Tweet.tag_list(@tweets) %>
-<% size = @tweets.size %>
+<% tags_count = tags["tags_count"] %>
+<% tags = tags["tags"] %>
 
 <div class="page-header">
-	<h1>Tags found: <%= tags.size %></h1>
+	<h1>Tags found: <em><%= tags.size %></em></h1>
 </div>
 
 <table id="tags_table" class="table table-striped table-bordered table-hover dataTable no-footer">
@@ -21,7 +22,10 @@
 			<td><%= v %></td>
 			<td>
 				<div class="progress">
-					<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<%= 100*v/size %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= 100*v/size %>%;"><span class="sr-only"><%= 100*v/size %>% Complete</span></div>
+					<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow=
+					"<%= 100*v/tags_count %>" aria-valuemin="0" aria-valuemax="100" style=
+					"width: <%= 100*v/tags_count %>%;"><span class="sr-only">
+						<%= 100*v/tags_count %>% Complete</span></div>
 				</div>
 			</td>
 		</tr>
