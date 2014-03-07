@@ -23,6 +23,8 @@
 	</div>	
 </div>
 
+<hr />
+<div id="search_errors"></div>
 <div id="articles_list"></div>
 
 <script>
@@ -32,6 +34,7 @@ var short_urls_map = {};
 var articles_count = 0;
 var url;
 var kill_search = false;
+var search_errors = 0;
 
 $(document).ready(function() {
 	$('.btn').tooltip();
@@ -79,22 +82,26 @@ function process_articles(i){
 		console.log("ARTICLES: ");
 		console.log(articles);
 		articles_are_processed = true;
-		if (store_in_db) $.post('/diffbot_api/create', {url: "research", response: JSON.stringify(articles)});
+		if (store_in_db) $.post('/diffbot_api/create', { url: "research", response: JSON.stringify(articles)});
 		$("#kill_search_button").addClass( "disabled" );
 		$("#order_by_relevance_button").removeClass( "disabled" );
 		$('#articles_count').html(articles_count);
-		return ;
+		if (search_errors > 0) {
+			$('#search_errors').addClass("alert alert-danger alert-dismissable");
+			$('#search_errors').html('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+									 '<strong>Oops!</strong> We could not process ' + search_errors +' articles. More information in your browser console...');
+		}
+	} else {
+		url = short_urls[i]; // we retrieve the short url
+		if (url in short_urls_map) { //if the short url has already been processed
+			console.log(url + " is already in.");
+			articles[short_urls_map[url]]["count"] += 1; //we add a count to the article list
+			process_articles(i+1);
+		} else { //we process the ajax request 
+			if(diffbot) { diffbot_request(i); }
+			else { ajax_request(i); }
+		}	
 	}
-
-	url = short_urls[i]; // we retrieve the short url
-	if (url in short_urls_map) { //if the short url has already been processed
-		console.log(url + " is already in.");
-		articles[short_urls_map[url]]["count"] += 1; //we add a count to the article list
-		process_articles(i+1);
-	} else { //we process the ajax request 
-		if(diffbot) { diffbot_request(i); }
-		else { ajax_request(i); }
-	}	
 }
 
 
@@ -123,10 +130,16 @@ function ajax_request(i){
 		else {
 			console.log('Could not process ' + url);
 			console.log('with expanded url: ' + found_url);
-			articles_count += 1;
+			search_errors += 1;
 		}
-		process_articles(i+1);
-	});
+	})
+	.fail(function() {
+    	console.log('Could not process ' + url);
+    	search_errors += 1;
+  	})
+  	.always(function() {
+  		process_articles(i+1);
+  	});
 }
 
 
@@ -159,14 +172,19 @@ function diffbot_request(i){
 			
 			display_article(article); // we display the article
 		}
-		process_articles(i+1);
-	});
+	}).fail(function() {
+    	console.log('Could not process ' + url);
+    	search_errors += 1;
+  	}).always(function() {
+  		process_articles(i+1);
+  	});
+
 }
 
 
 function display_article(article){
 	
-	var template ='<hr ><div class="media">';
+	var template ='<div class="media">';
 	template	+='<a class="pull-left" href="' + article["resolved_url"]+'", target="_blank"">'
   				+ '<img class="media-object" data-src="holder.js/64x64" alt="64x64" src="';
   	
@@ -188,7 +206,7 @@ function display_article(article){
     } else {
     	template +='<p>' + article["description"].substring(0,500); + '</p>';
     }		
-    template += '</div></div>';
+    template += '</div></div><hr />';
     
     articles_count += 1;
     $("#articles_list").append(template);
