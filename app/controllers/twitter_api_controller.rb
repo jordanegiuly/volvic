@@ -18,16 +18,15 @@ class TwitterApiController < ApplicationController
     resolved_urls = params[:resolved_urls] || []
     article = {"short_url" => short_url, "resolved_url" => short_url, "title" => "", "description" =>"", "image" => "", "author" =>"", "date"=>"", "tags" => [], 
                "type"=>"", "success" => false }
-    
     begin
       resolved_url = resolve_url(short_url)
       article["resolved_url"] = resolved_url
     
       if !(resolved_urls.include?(resolved_url))
         doc = Nokogiri::HTML(open(resolved_url))
-        doc = doc.css('head')
         doc.css('meta').each do |meta|
-          parse_header(meta.to_s.scan( /="([^"]*)"/), article)
+          meta = meta.to_s
+          parse_header(meta, article)
         end
         article["title"] = doc.css('title').text if article["title"].empty?
       end
@@ -61,9 +60,19 @@ class TwitterApiController < ApplicationController
   
   # Helper
   def parse_header(meta, data)
-    key = meta.first.first
-    value = meta.last.first
+    scan = meta.scan(/<meta ([^=]*)/)
+    meta_name = if scan.empty? then "" else scan.first.first end
+    return if !((meta_name == "name") || (meta_name == "property") || (meta_name == "itemprop"))
     
+    scan = meta.scan(/="([^"]*)"/)
+    return if scan.empty?
+    key = scan.first.first
+    
+    scan = meta.scan(/content="([^"]*)/)
+    return if scan.empty?
+    value = scan.first.first
+    
+    print "\n meta: " + meta
     if key.match(/title/)
       data["title"] = value if data["title"].empty?
       return
@@ -80,7 +89,7 @@ class TwitterApiController < ApplicationController
       data["author"] = value if data["author"].empty?
       return
     end
-    if key.match(/published_time/)
+    if key.match(/published/i)
       data["date"] = value if data["date"].empty?
       return
     end
