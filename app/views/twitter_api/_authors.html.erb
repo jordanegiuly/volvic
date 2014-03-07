@@ -35,7 +35,7 @@ function process_authors(){
 	
 	for(var k in articles) {
     	var author = articles[k]["data"].author;
-    	if (author === undefined) continue;
+    	if ((author === undefined)||(!author)) continue;
     	    	
     	if (author in authors) {
     		authors[author] += articles[k]["count"];

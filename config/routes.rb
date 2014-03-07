@@ -50,6 +50,7 @@ Project::Application.routes.draw do
   # just remember to delete public/index.html.
   get "twitter_api/index"
   get "twitter_api/search"
+  post "twitter_api/show_url"
   
   post "diffbot_api/create"
   

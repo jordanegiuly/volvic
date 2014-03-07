@@ -30,6 +30,9 @@
 	</p>
 	<p>
 		<%= link_to "New search >>", root_path, :class => "btn btn-warning btn-lg" %>
+		<button id="diffbot_search_button" type="button" class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="top" title="Faster and more relevant search">
+			Search with Diffbot
+		</button>
 	</p>
 </div>
 
@@ -43,10 +46,12 @@
 </div>
 
 <script>
-
 var articles = {};
 var articles_are_processed = false; //set to false
+var diffbot = false;
+
 var processed_articles = 0;
+
 //articles = <%= raw @articles %>; // to comment
 //console.log(articles); // to comment
 var store_in_db = false;
@@ -57,6 +62,11 @@ $(document).ready(function() {
 
 function navigation(){
 	$( "#articles_partial" ).click(function() {
+  		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
+	});
+	$( "#diffbot_search_button" ).click(function() {
+		diffbot = true;
+		reset_search();
   		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
 	});
 	$( "#twitter_partial" ).click(function() {
@@ -71,5 +81,12 @@ function navigation(){
 	$( "#authors_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'authors') %>");
 	});
+}
+
+
+function reset_search(){
+	articles = {};
+	articles_are_processed = false;
+	processed_articles = 0;
 }
 </script>

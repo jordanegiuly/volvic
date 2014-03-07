@@ -41,6 +41,8 @@ gem "less-rails"
 gem 'unicorn'
 gem 'unicorn-rails'
 
+# To retrieve meta data
+gem "nokogiri"
 
 # Deploy with Capistrano
 # gem 'capistrano'

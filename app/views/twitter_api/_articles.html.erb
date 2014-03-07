@@ -1,6 +1,6 @@
 
 <div class="page-header">
-	<h1>Articles found: <em id="articles_count">Loading...</em>
+	<h1>Articles found: <em id="articles_count">loading...</em>
 		
 		<button id="order_by_relevance_button" type="button" class="btn btn-default pull-right disabled" data-toggle="tooltip" data-placement="top" title="Order by relevance" style="margin-top: 3px;">
 			<span class="glyphicon glyphicon-chevron-up"></span>
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="col-md-1">
-		<button id="kill_diffbot_request_button" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="top" title="Stop" style="margin-top: 3px;">
+		<button id="kill_search_button" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="top" title="Stop" style="margin-top: 3px;">
 			<span class="glyphicon glyphicon-remove"></span>
 		</button>
 	</div>	
@@ -31,13 +31,13 @@ var short_urls_count = short_urls.length;
 var short_urls_map = {};
 var articles_count = 0;
 var url;
-var kill_diffbot_request = false;
+var kill_search = false;
 
 $(document).ready(function() {
 	$('.btn').tooltip();
-	$("#kill_diffbot_request_button").click(function() {
-  		kill_diffbot_request = true;
-  		$("#kill_diffbot_request_button").addClass( "disabled" );
+	$("#kill_search_button").click(function() {
+  		kill_search = true;
+  		$("#kill_search_button").addClass( "disabled" );
 	});
 	$("#order_by_relevance_button").click(function() {
   		order_articles_by_relevance();
@@ -49,25 +49,29 @@ $(document).ready(function() {
 
 function display_articles(){
 	if (articles_are_processed) {
-		$("#kill_diffbot_request_button").addClass( "disabled" );
+		$("#kill_search_button").addClass( "disabled" );
 		$("#order_by_relevance_button").removeClass( "disabled" );
 		for(var k in articles) {
 			display_article(articles[k]["data"]);
 		}
 		update_progress_bar(short_urls_count, processed_articles);
+		$('#articles_progress-bar').attr('class', 'progress-bar progress-bar-success');
+		$('#articles_progress-bar').parent().removeClass("active");
+		$('#articles_count').html(articles_count);
 	}
 	else {
 		process_articles(0);
 	}
 }
 
+
 function process_articles(i){
 	
 	processed_articles = i;
 	update_progress_bar(short_urls_count, processed_articles);
 	
-	if ((kill_diffbot_request) || (i >= short_urls_count)) { 
-		if (kill_diffbot_request) {console.log("REQUEST ABORDED !");}
+	if ((kill_search) || (i >= short_urls_count)) { 
+		if (kill_search) {console.log("REQUEST ABORDED !");}
 		else {
 			$('#articles_progress-bar').attr('class', 'progress-bar progress-bar-success');
 			$('#articles_progress-bar').parent().removeClass("active");
@@ -76,8 +80,9 @@ function process_articles(i){
 		console.log(articles);
 		articles_are_processed = true;
 		if (store_in_db) $.post('/diffbot_api/create', {url: "research", response: JSON.stringify(articles)});
-		$("#kill_diffbot_request_button").addClass( "disabled" );
+		$("#kill_search_button").addClass( "disabled" );
 		$("#order_by_relevance_button").removeClass( "disabled" );
+		$('#articles_count').html(articles_count);
 		return ;
 	}
 
@@ -86,12 +91,46 @@ function process_articles(i){
 		console.log(url + " is already in.");
 		articles[short_urls_map[url]]["count"] += 1; //we add a count to the article list
 		process_articles(i+1);
-	} else { //we process the ajax request to DIffbot API 
-		ajax_request(i);
+	} else { //we process the ajax request 
+		if(diffbot) { diffbot_request(i); }
+		else { ajax_request(i); }
 	}	
 }
 
+
 function ajax_request(i){
+	$.ajax({
+		type: "POST",
+		dataType: 'json',
+		url: "/twitter_api/show_url.json",
+		data: { short_url: url, resolved_urls: Object.keys(articles) }
+	})
+	.done(function(article) {
+		found_url = article["resolved_url"] || url;
+		if (article["success"]){
+			short_urls_map[url] = found_url ;
+	
+			if (found_url in articles) {
+				console.log(found_url + ' is already in');
+				articles[found_url]["count"] += 1;
+			}
+			else {
+				console.log("new article: " + found_url);
+				articles[found_url] = { count: 1, data: article};
+				display_article(article); // we display the article
+			}
+		}
+		else {
+			console.log('Could not process ' + url);
+			console.log('with expanded url: ' + found_url);
+			articles_count += 1;
+		}
+		process_articles(i+1);
+	});
+}
+
+
+function diffbot_request(i){
 	$.ajax({
 		url: "http://api.diffbot.com/v2/article",
 		context: document.body,
@@ -107,6 +146,15 @@ function ajax_request(i){
 		}
 		else {
 			console.log("new article: " + found_url);
+			article["short_url"] = url;
+			article["author"] = article["author"] || "";
+			article["date"] = article["date"] || "";
+			article["description"] = article["text"] || "";
+			if (typeof article["images"] === "undefined"){
+				article["image"] = "";
+			} else {
+				article["image"] = article["images"][0]["url"] || "";
+			}
 			articles[found_url] = { count: 1, data: article};
 			
 			display_article(article); // we display the article
@@ -115,16 +163,17 @@ function ajax_request(i){
 	});
 }
 
+
 function display_article(article){
 	
 	var template ='<hr ><div class="media">';
 	template	+='<a class="pull-left" href="' + article["resolved_url"]+'", target="_blank"">'
   				+ '<img class="media-object" data-src="holder.js/64x64" alt="64x64" src="';
   	
-  	if (typeof article["images"] === "undefined" || article["images"].length == 0) {
+  	if (!article["image"]) {
     	template +='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIj48L3JlY3Q+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+';
     } else {
-    	template += article["images"][0]["url"];
+    	template += article["image"];
     }
 	
   	template	+='" style="width: 64px; height: 64px;">'
@@ -134,10 +183,10 @@ function display_article(article){
   			 	+ '<h4 class="media-heading">'+ article["title"] +'</h4>'
     		 	+ '</a>'
     		 	+ '<em> Posted on '+ article["date"] + ', by ' + article["author"] + ' </em>';
-    if (typeof article["text"] === "undefined") {
-    	template += '<p>No summary available...</p>';
+    if (!article["description"]) {
+    	template += '<p>No description available...</p>';
     } else {
-    	template +='<p>' + article["text"].substring(0,500); + '</p>';
+    	template +='<p>' + article["description"].substring(0,500); + '</p>';
     }		
     template += '</div></div>';
     
@@ -146,12 +195,14 @@ function display_article(article){
 	$('#articles_count').html(articles_count);
 }
 
+
 function update_progress_bar(size, i){
 	var valeur = 100;
 	if (size != 0) { valeur = i * 100 / size; } 
 	
-	$('#articles_progress-bar').css('width', valeur+'%').attr('aria-valuenow', valeur);	
+	$('#articles_progress-bar').css('width', valeur +'%').attr('aria-valuenow', valeur);	
 }
+
 
 function order_articles_by_relevance(){
 	$('#articles_list').html("");
