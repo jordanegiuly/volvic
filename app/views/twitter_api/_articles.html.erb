@@ -30,11 +30,10 @@
 <script>
 var short_urls = <%= raw @short_urls %>;
 var short_urls_count = short_urls.length;
-var short_urls_map = {};
-var articles_count = 0;
 var url;
 var kill_search = false;
 var search_errors = 0;
+var articles_count = 0;
 
 $(document).ready(function() {
 	$('.btn').tooltip();
@@ -51,6 +50,15 @@ $(document).ready(function() {
 
 
 function display_articles(){
+	if (processing_search) { 
+		for(var k in articles) {
+			display_article(articles[k]["data"]);
+		}
+		$('#articles_count').html(articles_count);
+		update_progress_bar(short_urls_count, processed_articles);
+		return;
+	}
+	
 	if (articles_are_processed) {
 		$("#kill_search_button").addClass( "disabled" );
 		$("#order_by_relevance_button").removeClass( "disabled" );
@@ -60,9 +68,9 @@ function display_articles(){
 		update_progress_bar(short_urls_count, processed_articles);
 		$('#articles_progress-bar').attr('class', 'progress-bar progress-bar-success');
 		$('#articles_progress-bar').parent().removeClass("active");
-		$('#articles_count').html(articles_count);
 	}
 	else {
+		processing_search = true;
 		process_articles(0);
 	}
 }
@@ -73,19 +81,26 @@ function process_articles(i){
 	processed_articles = i;
 	update_progress_bar(short_urls_count, processed_articles);
 	
-	if ((kill_search) || (i >= short_urls_count)) { 
-		if (kill_search) {console.log("REQUEST ABORDED !");}
+	if ((kill_search) || (i >= short_urls_count)) { // end of the processing
+		if (kill_search) {
+			console.log("REQUEST ABORDED !");
+			$('#articles_progress-bar').parent().removeClass("active");
+		}
 		else {
 			$('#articles_progress-bar').attr('class', 'progress-bar progress-bar-success');
 			$('#articles_progress-bar').parent().removeClass("active");
 		}
+		
 		console.log("ARTICLES: ");
 		console.log(articles);
 		articles_are_processed = true;
+		processing_search = false;
 		if (store_in_db) $.post('/diffbot_api/create', { url: "research", response: JSON.stringify(articles)});
+		
 		$("#kill_search_button").addClass( "disabled" );
 		$("#order_by_relevance_button").removeClass( "disabled" );
 		$('#articles_count').html(articles_count);
+		
 		if (search_errors > 0) {
 			$('#search_errors').addClass("alert alert-danger alert-dismissable");
 			$('#search_errors').html('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
@@ -106,6 +121,7 @@ function process_articles(i){
 
 
 function ajax_request(i){
+	console.log('request to: ' + url);
 	$.ajax({
 		type: "POST",
 		dataType: 'json',
@@ -118,11 +134,11 @@ function ajax_request(i){
 			short_urls_map[url] = found_url ;
 	
 			if (found_url in articles) {
-				console.log(found_url + ' is already in');
+				console.log("it's already in: " + found_url);
 				articles[found_url]["count"] += 1;
 			}
 			else {
-				console.log("new article: " + found_url);
+				console.log("it's a new article: " + found_url);
 				articles[found_url] = { count: 1, data: article};
 				display_article(article); // we display the article
 			}
@@ -144,6 +160,7 @@ function ajax_request(i){
 
 
 function diffbot_request(i){
+	console.log('request to: ' + url);
 	$.ajax({
 		url: "http://api.diffbot.com/v2/article",
 		context: document.body,
@@ -154,11 +171,11 @@ function diffbot_request(i){
 		short_urls_map[url] = found_url ;
 
 		if (found_url in articles) {
-			console.log(found_url + ' is already in');
+			console.log("it's already in: " + found_url);
 			articles[found_url]["count"] += 1;
 		}
 		else {
-			console.log("new article: " + found_url);
+			console.log("it's a new article: " + found_url);
 			article["short_url"] = url;
 			article["author"] = article["author"] || "";
 			article["date"] = article["date"] || "";
@@ -173,7 +190,7 @@ function diffbot_request(i){
 			display_article(article); // we display the article
 		}
 	}).fail(function() {
-    	console.log('Could not process ' + url);
+    	console.log('Error with: ' + url);
     	search_errors += 1;
   	}).always(function() {
   		process_articles(i+1);

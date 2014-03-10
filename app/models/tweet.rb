@@ -21,6 +21,7 @@ class Tweet < ActiveRecord::Base
     client = Tweet.initialize_client
     tweets = []
     urls = []
+    #TODO INCLUDE BEGIN RESCUE
     twitter_api_result = client.search(tag, :result_type => "recent").take(count)
     
     twitter_api_result.each do |tweet|

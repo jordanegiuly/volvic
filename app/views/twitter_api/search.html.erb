@@ -11,12 +11,15 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li id="articles_partial"><a href="#">List of articles</a></li>
-            <li id="twitter_partial"><a href="#">Twitter</a></li>
-            <li id="tags_partial"><a href="#">Tags</a></li>
-            <li id="medias_partial"><a href="#">Medias</a></li>
-            <li id="authors_partial"><a href="#">Authors</a></li>
+            <li><a href="#">About</a></li>
           </ul>
+
+          <form accept-charset="UTF-8" action="search" class="navbar-form navbar-right" role="search" method="get">
+        	<div class="form-group">
+            	<input id="search_tag" name="search_tag" type="text" class="form-control" placeholder="#new search" value="">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+      	  </form>
         </div><!--/.nav-collapse -->
       </div>
     </div>
@@ -36,6 +39,15 @@
 	</p>
 </div>
 
+<ul class="nav nav-pills red">
+  <li id="articles_partial" class="active"><a href="#">List of articles</a></li>
+  <li id="twitter_partial"><a href="#">Twitter</a></li>
+  <li id="tags_partial"><a href="#">Tags</a></li>
+  <li id="medias_partial"><a href="#">Medias</a></li>
+  <li id="authors_partial"><a href="#">Authors</a></li>
+</ul>
+
+
 <% if @tweets.size == 0 %>
 <div class="page-header">
 	<h1>Oops! No result was found...</h1>
@@ -47,14 +59,14 @@
 
 <script>
 var articles = {};
+var processed_articles = 0;
+var processing_search = false;
 var articles_are_processed = false; //set to false
 var diffbot = false;
-
-var processed_articles = 0;
+var short_urls_map = {};
 
 //articles = <%= raw @articles %>; // to comment
-//console.log(articles); // to comment
-var store_in_db = false;
+var store_in_db = false; //set to false
 
 $(document).ready(function() {
 	navigation();
@@ -63,30 +75,44 @@ $(document).ready(function() {
 function navigation(){
 	$( "#articles_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
+  		$("li").removeClass("active");
+  		$("#articles_partial").addClass("active");
 	});
 	$( "#diffbot_search_button" ).click(function() {
 		diffbot = true;
 		reset_search();
+		$("li").removeClass("active");
+		$("#articles_partial").addClass("active");
   		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
 	});
 	$( "#twitter_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'twitter') %>");
+  		$("li").removeClass("active");
+  		$("#twitter_partial").addClass("active");
 	});	
 	$( "#tags_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'tags') %>");
+  		$("li").removeClass("active");
+  		$("#tags_partial").addClass("active");
 	});	
 	$( "#medias_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'medias') %>");
+  		$("li").removeClass("active");
+  		$("#medias_partial").addClass("active");
 	});
 	$( "#authors_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'authors') %>");
+  		$("li").removeClass("active");
+  		$("#authors_partial").addClass("active");
 	});
 }
 
 
 function reset_search(){
 	articles = {};
-	articles_are_processed = false;
 	processed_articles = 0;
+	processing_search = false;
+	articles_are_processed = false;
+	short_urls_map = {};
 }
 </script>

@@ -5,7 +5,7 @@ class TwitterApiController < ApplicationController
 
   def search
     @search_tag = params[:search_tag] || ""
-    search_results = Tweet.stream(@search_tag, 50) if !@search_tag.empty?
+    search_results = Tweet.stream(@search_tag, 50) if !@search_tag.empty? #TODO: INCLUDE BEGIN RESCUE
     search_results ||= {"tweets" => [], "short_urls" => []}
     @tweets = search_results["tweets"]
     @short_urls = search_results["short_urls"]
@@ -72,7 +72,6 @@ class TwitterApiController < ApplicationController
     return if scan.empty?
     value = scan.first.first
     
-    print "\n meta: " + meta
     if key.match(/title/)
       data["title"] = value if data["title"].empty?
       return
