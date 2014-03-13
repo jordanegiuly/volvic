@@ -1,0 +1,72 @@
+<div class="page-header">
+	<h1>Authors found: <em>17</em>
+		<div class="btn-group pull-right">
+		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+		    Order by <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		    <li><a href="#">Frequency <span class="glyphicon glyphicon-ok pull-right"></span></a></li>
+		    <li class="disabled"><a href="#">Audience</a></li>
+		  </ul>
+		</div>		
+	</h1>
+</div>
+
+<% author1 = Faker::Name.first_name + " " + Faker::Name.last_name %>
+<% author2 = Faker::Name.first_name + " " + Faker::Name.last_name %>
+<% author3 = Faker::Name.first_name + " " + Faker::Name.last_name %>
+<% author4 = Faker::Name.first_name + " " + Faker::Name.last_name %>
+<% author5 = Faker::Name.first_name + " " + Faker::Name.last_name %>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="list-group" style="margin-top: 20px;">
+  			<a href="/demo/author" class="list-group-item">
+  				<h4 style="color: #D79435;"><%= author1 %> <span class="badge pull-right">8</span></h4>
+  			</a>
+  			<a href="/demo/author" class="list-group-item">
+  				<h4 style="color: #E3A041;"><%= author2 %> <span class="badge pull-right">7</span></h4>
+  			</a>
+  			<a href="/demo/author" class="list-group-item">
+  				<h4 style="color: #F0AD4E;"><%= author3 %> <span class="badge pull-right">5</span></h4>
+  			</a>
+  			<a href="/demo/author" class="list-group-item">
+  				<h4 style="color: #FDBA5B;"><%= author4 %> <span class="badge pull-right">3</span></h4>
+  			</a>
+  			<a href="/demo/author" class="list-group-item">
+  				<h4 style="color: #FFC768;"><%= author5 %> <span class="badge pull-right">1</span></h4>
+  			</a>
+		</div>
+		
+		<button class="btn btn-default btn-lg pull-right disabled" type="button">
+    		View all authors <i class="fa fa-arrow-circle-right"></i>
+  		</button>
+		<div class="text-right">
+        	
+        </div>
+	</div>
+	<div class="col-md-6"><div id="tags-donut"></div></div>
+
+</div>
+<script>
+
+Morris.Donut({
+  element: 'tags-donut',
+  data: [
+    {label: "<%= raw author1 %>", value: 8},
+    {label: "<%= raw author2 %>", value: 7},
+    {label: "<%= raw author3 %>", value: 5},
+    {label: "<%= raw author4 %>", value: 3},
+    {label: "<%= raw author5 %>", value: 1},
+  ],
+  colors: [
+  	"#D79435",
+  	"#E3A041",
+  	"#F0AD4E",
+  	"#FDBA5B",
+  	"#FFC768"
+  ],
+});
+
+</script>

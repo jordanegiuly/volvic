@@ -1,0 +1,38 @@
+<div class="page-header">
+	<h1>Tweets found: <em>112</em>
+		<div class="btn-group pull-right">
+		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
+		</div>
+	</h1>
+</div>
+
+<table id="tweets_table" class="table table-bordered table-hover dataTable no-footer">
+	<thead>
+		<tr class="active">
+		  <th style="min-width: 100px;">Created at</th>
+		  <th>User</th>
+		  <th style="min-width: 200px;">Text</th>
+		  <th>Tags</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+	<% (1..12).each do |i| %>
+		<tr> 
+			<td><%= Time.at(Time.local(2014, 3, 1) + rand * (Time.now.to_f - Time.local(2014, 3, 1).to_f)).to_formatted_s(:short) %></td>
+			<td><%= Faker::Name.name %></td>
+			<td><%= Faker::Lorem.sentences(2).join(" ") %></td>
+			<td><%= Faker::Lorem.words(3).join(", ") %></td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+
+<script>
+$(document).ready(function() {
+	$('#tweets_table').dataTable({
+		"bAutoWidth": false,
+		"aaSorting": [[ 0, "desc" ]],
+	});
+});
+</script>

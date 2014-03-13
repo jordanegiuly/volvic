@@ -1,15 +1,15 @@
 
 <div class="page-header">
-	<h1>Articles found: <em id="articles_count">10</em>
+	<h1>Articles found: <em id="articles_count">45</em>
 	<div class="btn-group pull-right">
 	  <button type="button" class="btn btn-default disabled">Export to CSV</button>
 	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 	    Order by <span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu" role="menu">
-	    <li><a href="#">Date</a></li>
+	    <li><a href="#">Date <span class="glyphicon glyphicon-ok pull-right"></span></a></li>
 	    <li><a href="#">Media</a></li>
-	    <li class="disabled"><a href="#">Relevance</a></li>
+	    <li class="disabled"><a href="#">Frequency</a></li>
 	    <li class="disabled"><a href="#">Audience</a></li>
 	  </ul>
 	</div>
@@ -43,21 +43,26 @@
 	 		style="width: 64px; height: 64px;">
 	  	</a>
 	  	<div class="media-body">
-	  		<h4 class="media-heading">
-	  			<a href="#"><%= Faker::Lorem.sentence %></a>
-	  			<div class="btn-group pull-right">
+	  		<div class="col-md-10">
+		  		<h4 class="media-heading">
+		  			<a href="#"><%= Faker::Lorem.sentence %></a>
+		    	</h4>
+		    	<em><%= link_to Faker::Internet.url, "media" %>, by <%= link_to Faker::Name.name, "author" %>, on <%= Time.at(Time.local(2014, 3, 1) + rand * (Time.now.to_f - Time.local(2014, 3, 1).to_f)).to_formatted_s(:short) %></em>
+		    	<p><%= Faker::Lorem.paragraph %></p>
+	    	</div>
+	    	<div class="col-md-2">
+				
+				<div class="btn-group pull-right">
 		  			<button type="button" class="btn btn-xs btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></button>
 		  			<button type="button" class="btn btn-xs btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></button>
 		  			<button type="button" class="btn btn-xs btn-social-icon btn-google-plus"><i class="fa fa-google-plus"></i></button>
 	  			</div>
 	  			
-    			<button type="button" class="btn btn-default btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Flag this as irrelevant" style="margin-right: 5px;">
+    			<button type="button" class="btn btn-default btn-xs pull-right" data-toggle="tooltip" data-placement="bottom" title="Flag this as irrelevant" style="margin-right: 5px; height: 22px; width: 22px;">
     				<span class="glyphicon glyphicon-flag"></span>
     			</button>
-	    		
-	    	</h4>
-	    	<em><%= link_to Faker::Internet.url, "media" %>, by <%= link_to Faker::Name.name, "author" %>, on <%= Time.at(Time.local(2014, 3, 1) + rand * (Time.now.to_f - Time.local(2014, 3, 1).to_f)).to_formatted_s(:short) %></em>
-	    	<p><%= Faker::Lorem.paragraph %></p>
+
+	    	</div>
 	    </div>
     </div>
     <hr />

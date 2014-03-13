@@ -14,4 +14,4 @@
 //= require jquery_ujs
 //= require bootstrap.min
 //= require sb-admin
-//= require_tree .
+//= require plugins
