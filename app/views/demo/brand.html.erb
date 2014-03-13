@@ -1,57 +1,21 @@
 <div class="container theme-showcase" role="main">
-
-<div class="jumbotron" style="margin-bottom: 0px;">
-	<h1>My brand page</h1>
-	<p>This page shows all the analytics available for your brand.</p>
-</div>
-
-<ul id="partial_list" class="nav nav-pills nav-justified" style="padding-top: 30px;">
-  <li id="articles_partial" class="active"><a href="#partial_list">Articles</a></li>
-  <li id="medias_partial"><a href="#partial_list">Medias</a></li>
-  <li id="authors_partial"><a href="#partial_list">Authors</a></li>
-  <li id="tags_partial"><a href="#partial_list">Tags</a></li>
-  <li id="tweets_partial"><a href="#partial_list">Tweets</a></li>
-</ul>
-
-<div id="content_partial">
-	<%= render partial: "articles" %>
-</div>
+	<div class="jumbotron" style="margin-bottom: 0px;">
+		<h1>My brand page</h1>
+		<p>This page shows all the analytics available for your brand.</p>
+	</div>
+	
+	<%= render partial: 'navpills', locals: { pills: ["articles", "keywords", "medias", "authors", "tweets"] } %>
+	
+	<div id="content_partial">
+		<%= render partial: "articles" %>
+	</div>
 
 </div>
 
 <script>
-
 $(document).ready(function() {
   	$(".navbar li").removeClass("active");
 	$("#navbar_brand").addClass("active");
-	navigation();
+	$("#articles_partial").addClass("active");
 });
-
-function navigation(){
-	$( "#articles_partial" ).click(function() {
-  		$("#content_partial").html("<%= escape_javascript(render partial: 'articles') %>");
-  		$(".nav-pills li").removeClass("active");
-  		$("#articles_partial").addClass("active");
-	});
-	$( "#medias_partial" ).click(function() {
-  		$("#content_partial").html("<%= escape_javascript(render partial: 'medias') %>");
-  		$(".nav-pills li").removeClass("active");
-  		$("#medias_partial").addClass("active");
-	});
-	$( "#authors_partial" ).click(function() {
-  		$("#content_partial").html("<%= escape_javascript(render partial: 'authors') %>");
-  		$(".nav-pills li").removeClass("active");
-  		$("#authors_partial").addClass("active");
-	});		
-	$( "#tags_partial" ).click(function() {
-  		$("#content_partial").html("<%= escape_javascript(render partial: 'tags') %>");
-  		$(".nav-pills li").removeClass("active");
-  		$("#tags_partial").addClass("active");
-	});
-	$( "#tweets_partial" ).click(function() {
-  		$("#content_partial").html("<%= escape_javascript(render partial: 'tweets') %>");
-  		$(".nav-pills li").removeClass("active");
-  		$("#tweets_partial").addClass("active");
-	});
-}
 </script>
