@@ -1,0 +1,52 @@
+<div class="page-header">
+	<h1>Tags found: <em>30</em></h1>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="list-group" style="margin-top: 20px;">
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #D79435;">Blog <span class="badge pull-right">30</span></h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #E3A041;">Mobile <span class="badge pull-right">20</span></h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #F0AD4E;">Startup <span class="badge pull-right">15</span></h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #FDBA5B;">Content <span class="badge pull-right">10</span></h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #FFC768;">Sharing <span class="badge pull-right">5</span></h4>
+  			</a>
+		</div>
+	
+		<div class="text-right">
+        	<a href="#">View All tags <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+	</div>
+	<div class="col-md-6"><div id="tags-donut"></div></div>
+
+</div>
+<script>
+
+Morris.Donut({
+  element: 'tags-donut',
+  data: [
+    {label: "Blog", value: 30},
+    {label: "Mobile", value: 20},
+    {label: "Startup", value: 15},
+    {label: "Content", value: 10},
+    {label: "Sharing", value: 5},
+  ],
+  colors: [
+  	"#D79435",
+  	"#E3A041",
+  	"#F0AD4E",
+  	"#FDBA5B",
+  	"#FFC768"
+  ],
+});
+
+</script>

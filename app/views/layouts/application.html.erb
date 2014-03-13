@@ -2,16 +2,53 @@
 <html>
 <head>
   <title>Press Tracker</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "demo", :media => "all" %>
   <%= javascript_include_tag "application" %>
-  <script src="http://cdn.embed.ly/jquery.embedly-3.1.1.min.js" type="text/javascript"></script>
-  <script src="http://cdn.embed.ly/jquery.preview-0.3.2.min.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="http://cdn.embed.ly/jquery.preview-0.3.2.css" />
   <%= csrf_meta_tags %>
 </head>
 <body>
+	
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= root_path %>">Press tracker</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li id="navbar_brand" class="active"><a href="/demo/brand">Brand page</a></li>
+        <li id="navbar_media"><a href="/demo/media">Media page</a></li>
+        <li id="navbar_author"><a href="/demo/author">Author page</a></li>
+        <li id="navbar_keyword"><a href="/demo/keyword">Keyword page</a></li>
+      </ul>
+
+      <form accept-charset="UTF-8" action="search" class="navbar-form navbar-right" role="search" method="get">
+    	<div class="form-group">
+        	<input id="search_tag" name="search_tag" type="text" class="form-control" placeholder="#new search" value="">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+  	  </form>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
 
 <%= yield %>
+<div class="container">
+<footer>
+    <div class="row">
+        <div class="col-lg-12">
+            <p>Copyright © Company 2013</p>
+        </div>
+    </div>
+</footer>
+</div>
+
 
 </body>
 </html>

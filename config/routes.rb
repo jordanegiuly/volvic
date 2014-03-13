@@ -54,6 +54,12 @@ Project::Application.routes.draw do
   
   post "diffbot_api/create"
   
+  get "demo/brand"
+  get "demo/media"
+  get "demo/author"
+  get "demo/keyword"
+  
+  
   root 'twitter_api#index'
   # See how all your routes lay out with "rake routes"
 

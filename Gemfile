@@ -44,6 +44,7 @@ gem 'unicorn-rails'
 # To retrieve meta data
 gem "nokogiri"
 
+gem 'faker'
 # Deploy with Capistrano
 # gem 'capistrano'
 

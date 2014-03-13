@@ -1,0 +1,72 @@
+
+<div class="page-header">
+	<h1>Articles found: <em id="articles_count">10</em>
+	<div class="btn-group pull-right">
+	  <button type="button" class="btn btn-default disabled">Export to CSV</button>
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	    Order by <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu">
+	    <li><a href="#">Date</a></li>
+	    <li><a href="#">Media</a></li>
+	    <li class="disabled"><a href="#">Relevance</a></li>
+	    <li class="disabled"><a href="#">Audience</a></li>
+	  </ul>
+	</div>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-md-11">
+		<div class="progress progress-striped " style="margin-top: 10px; margin-bottom: 10px;">
+			<div id="articles_progress-bar" class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+				<span class="sr-only">100% Complete</span>
+		  	</div>
+		</div>
+	</div>
+	<div class="col-md-1">
+		<button id="kill_search_button" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="left" title="Abort search" style="margin-top: 3px;">
+			<span class="glyphicon glyphicon-remove"></span>
+		</button>
+	</div>	
+</div>
+
+<hr />
+
+<div id="articles_list">
+	<% (1..10).each do |i| %>
+	
+	<div class="media">
+		<a class="pull-left" href="#">
+	  		<img class="media-object" data-src="holder.js/64x64" alt="64x64" 
+	  		src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIj48L3JlY3Q+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+"
+	 		style="width: 64px; height: 64px;">
+	  	</a>
+	  	<div class="media-body">
+	  		<h4 class="media-heading">
+	  			<a href="#"><%= Faker::Lorem.sentence %></a>
+	  			<div class="btn-group pull-right">
+		  			<button type="button" class="btn btn-xs btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></button>
+		  			<button type="button" class="btn btn-xs btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></button>
+		  			<button type="button" class="btn btn-xs btn-social-icon btn-google-plus"><i class="fa fa-google-plus"></i></button>
+	  			</div>
+	  			
+    			<button type="button" class="btn btn-default btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Flag this as irrelevant" style="margin-right: 5px;">
+    				<span class="glyphicon glyphicon-flag"></span>
+    			</button>
+	    		
+	    	</h4>
+	    	<em><%= link_to Faker::Internet.url, "media" %>, by <%= link_to Faker::Name.name, "author" %>, on <%= Time.at(Time.local(2014, 3, 1) + rand * (Time.now.to_f - Time.local(2014, 3, 1).to_f)).to_formatted_s(:short) %></em>
+	    	<p><%= Faker::Lorem.paragraph %></p>
+	    </div>
+    </div>
+    <hr />
+    <% end %>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('.btn').tooltip();
+	$('.dropdown-toggle').dropdown();
+});
+</script>

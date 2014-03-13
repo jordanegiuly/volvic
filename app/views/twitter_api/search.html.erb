@@ -1,29 +1,3 @@
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="<%= root_path %>">Press tracker</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#">About</a></li>
-          </ul>
-
-          <form accept-charset="UTF-8" action="search" class="navbar-form navbar-right" role="search" method="get">
-        	<div class="form-group">
-            	<input id="search_tag" name="search_tag" type="text" class="form-control" placeholder="#new search" value="">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-      	  </form>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-
 <div class="container theme-showcase" role="main">
 
 <div class="jumbotron">
@@ -40,21 +14,21 @@
 </div>
 
 <ul class="nav nav-pills red">
-  <li id="articles_partial" class="active"><a href="#">List of articles</a></li>
-  <li id="twitter_partial"><a href="#">Twitter</a></li>
+  <li id="articles_partial" class="active"><a href="#">Articles</a></li>
+  <li id="twitter_partial"><a href="#">Tweets</a></li>
   <li id="tags_partial"><a href="#">Tags</a></li>
   <li id="medias_partial"><a href="#">Medias</a></li>
   <li id="authors_partial"><a href="#">Authors</a></li>
 </ul>
-
 
 <% if @tweets.size == 0 %>
 <div class="page-header">
 	<h1>Oops! No result was found...</h1>
 </div>
 <% else %>
-	<div id="search_result"><%= render partial: 'articles' %></div>
+<div id="search_result"><%= render partial: 'articles' %></div>
 <% end %>
+
 </div>
 
 <script>

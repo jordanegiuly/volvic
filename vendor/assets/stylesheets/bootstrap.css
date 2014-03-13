@@ -3911,6 +3911,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 
 .nav-pills > li > a {
   border-radius: 5px;
+  color: inherit;
 }
 
 .nav-pills > li + li {
@@ -4378,7 +4379,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .navbar-default .navbar-brand {
-  color: #777777;
+  color: #BD7A1B;
 }
 
 .navbar-default .navbar-brand:hover,
@@ -4404,8 +4405,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #555555;
-  background-color: #e7e7e7;
+  color: #ffffff;
+  background-color: #F0AD4E;
 }
 
 .navbar-default .navbar-nav > .disabled > a,
