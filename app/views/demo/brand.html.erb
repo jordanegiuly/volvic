@@ -1,15 +1,9 @@
-<div class="container theme-showcase" role="main">
-	<div class="jumbotron" style="margin-bottom: 0px;">
-		<h1>My brand page</h1>
-		<p>This page shows all the analytics available for your brand.</p>
-	</div>
-	
-	<%= render partial: 'navpills', locals: { pills: ["articles", "keywords", "medias", "authors", "tweets"] } %>
-	
-	<div id="content_partial">
+<%= render partial: 'sidebar', locals: { link: "#" } %>
+
+<div id="page-wrapper">
+	<div id="content_partial" class="container">
 		<%= render partial: "articles" %>
 	</div>
-
 </div>
 
 <script>
@@ -17,5 +11,6 @@ $(document).ready(function() {
   	$(".navbar li").removeClass("active");
 	$("#navbar_brand").addClass("active");
 	$("#articles_partial").addClass("active");
+	//navigation();
 });
 </script>

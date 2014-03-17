@@ -41,5 +41,10 @@ function navigation(){
   		$(".nav-pills li").removeClass("active");
   		$("#brands_partial").addClass("active");
 	});
+	$( "#audience_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'audience') %>");
+  		$(".nav-pills li").removeClass("active");
+  		$("#audience_partial").addClass("active");
+	});
 }
 </script>

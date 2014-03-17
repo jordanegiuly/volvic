@@ -1,5 +1,6 @@
 <div class="page-header">
 	<h1>Brands found: <em>45</em>
+		<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="Characterized by this keyword"><em>i</em></span>
 		<div class="btn-group pull-right">
 		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -40,13 +41,13 @@
         	
         </div>
 	</div>
-	<div class="col-md-6"><div id="tags-donut"></div></div>
+	<div class="col-md-6"><div id="brands-donut"></div></div>
 
 </div>
 <script>
 
 Morris.Donut({
-  element: 'tags-donut',
+  element: 'brands-donut',
   data: [
     {label: "Google", value: 80},
     {label: "Facebook", value: 55},

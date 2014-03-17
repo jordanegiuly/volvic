@@ -1,5 +1,6 @@
 <div class="page-header">
 	<h1>Keywords found: <em>30</em>
+		<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="in the articles"><em>i</em></span>
 		<div class="btn-group pull-right">
 		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -36,34 +37,65 @@
 		<button class="btn btn-default btn-lg pull-right disabled" type="button">
     		View all keywords <i class="fa fa-arrow-circle-right"></i>
   		</button>
-		<div class="text-right">
-        	
-        </div>
 	</div>
-	<div class="col-md-6"><div id="tags-donut"></div></div>
+	<div class="col-md-6"><div id="keywords-donut"></div></div>
 </div>
 
 
 <div class="row">
 	<div class="page-header">
-	<h1>Keyword evolution</h1>
+		<h1>Keyword evolution
+			<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="how your top keywords perform"><em>i</em></span>
+		</h1>
 	</div>
 	<div class="graph-container">
-		<div id="tags-area" class="graph"></div>
+		<div id="keywords-area" class="graph"></div>
 	</div>
 </div>
 
 
 <div class="row">
 	<div class="page-header">
-	<h1>Suggested keywords <small> based on competitors keywords</small></h1>
-	</div>	
+		<h1>Suggested keywords
+			<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="based on your competitors keywords"><em>i</em></span>
+		</h1>
+	</div>
+	
+	<div class="col-md-6">
+		<div class="list-group">
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #D79435;">Targeting</h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #E3A041;">ContentMarketing</h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #F0AD4E;">SEO</h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #FDBA5B;">Inbound</h4>
+  			</a>
+  			<a href="/demo/keyword" class="list-group-item">
+  				<h4 style="color: #FFC768;">Guestblogging</h4>
+  			</a>
+		</div>
+	</div>
+	<div class="col-md-6">
+		
+	</div>
+</div>
+
+	
+	
 </div>
 
 <script>
+$(document).ready(function() {
+
+$('.badge').tooltip();
 
 Morris.Donut({
-  element: 'tags-donut',
+  element: 'keywords-donut',
   data: [
     {label: "Blog", value: 30},
     {label: "Mobile", value: 20},
@@ -85,7 +117,7 @@ d1.setHours(0,0,0,0)
 d1.setDate(d1.getDate() - 7);
 
 Morris.Area({
-  element: 'tags-area',
+  element: 'keywords-area',
   data: [
     { x: d1.getTime(), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
     { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
@@ -96,8 +128,10 @@ Morris.Area({
     { x: d1.setDate(d1.getDate() + 1), a: 5, b: 10, c: 15, d: 20, e: 30 }
   ],
   xkey: 'x',
+  dateFormat: function (x) { return ""; },
   ykeys: ['a', 'b', 'c', 'd', 'e'],
   labels: ['Sharing', 'Content', 'Startup', 'Mobile', 'Blog'],
+  hideHover: 'auto',
   
   lineColors: [
   	"#FFE081",
@@ -106,6 +140,8 @@ Morris.Area({
   	"#D79435",
   	"#BD7A1B",
   ],
+});
+
 });
 
 </script>

@@ -6,11 +6,12 @@ class TwitterApiController < ApplicationController
 
   def search
     @search_tag = params[:search_tag] || ""
-    search_results = Tweet.stream(@search_tag, 5) if !@search_tag.empty? #TODO: INCLUDE BEGIN RESCUE
+    search_results = Tweet.stream(@search_tag, 10) if !@search_tag.empty? #TODO: INCLUDE BEGIN RESCUE
     search_results ||= {"tweets" => [], "short_urls" => []}
     @tweets = search_results["tweets"]
     @short_urls = search_results["short_urls"]
     @articles = DiffbotApi.last.response if DiffbotApi.count > 0
+    @page_title = "Search: " + @search_tag
   end
   
   

@@ -1,26 +1,15 @@
-<div class="container theme-showcase" role="main">
+<%= render partial: 'demo/sidebar', locals: { link: "#" } %>
 
-<div class="jumbotron">
-	<h1>Search: "<%= @search_tag %>"</h1>
-	<p>
-		This page shows the press tracking results for the input tag.
-	</p>
-	<p>
-		<%= link_to "New search >>", root_path, :class => "btn btn-warning btn-lg" %>
-		<button id="diffbot_search_button" type="button" class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="top" title="Faster and more relevant search">
+
+<div id="page-wrapper">
+
+<div class="container">
+
+		<button id="diffbot_search_button" type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="bottom" title="Faster and more relevant search" style="margin-top: 3px;">
 			Search with Diffbot
 		</button>
-	</p>
-</div>
 
-<ul class="nav nav-pills red">
-  <li id="articles_partial" class="active"><a href="#">Articles</a></li>
-  <li id="twitter_partial"><a href="#">Tweets</a></li>
-  <li id="tags_partial"><a href="#">Tags</a></li>
-  <li id="medias_partial"><a href="#">Medias</a></li>
-  <li id="authors_partial"><a href="#">Authors</a></li>
-</ul>
-
+		
 <% if @tweets.size == 0 %>
 <div class="page-header">
 	<h1>Oops! No result was found...</h1>
@@ -29,6 +18,7 @@
 <div id="search_result"><%= render partial: 'articles' %></div>
 <% end %>
 
+</div>
 </div>
 
 <script>
@@ -43,6 +33,8 @@ var short_urls_map = {};
 var store_in_db = false; //set to false
 
 $(document).ready(function() {
+	$('.btn').tooltip();
+	$("#articles_partial").addClass("active");
 	navigation();
 });
 
@@ -52,23 +44,6 @@ function navigation(){
   		$("li").removeClass("active");
   		$("#articles_partial").addClass("active");
 	});
-	$( "#diffbot_search_button" ).click(function() {
-		diffbot = true;
-		reset_search();
-		$("li").removeClass("active");
-		$("#articles_partial").addClass("active");
-  		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
-	});
-	$( "#twitter_partial" ).click(function() {
-  		$("#search_result").html("<%= escape_javascript(render partial: 'twitter') %>");
-  		$("li").removeClass("active");
-  		$("#twitter_partial").addClass("active");
-	});	
-	$( "#tags_partial" ).click(function() {
-  		$("#search_result").html("<%= escape_javascript(render partial: 'tags') %>");
-  		$("li").removeClass("active");
-  		$("#tags_partial").addClass("active");
-	});	
 	$( "#medias_partial" ).click(function() {
   		$("#search_result").html("<%= escape_javascript(render partial: 'medias') %>");
   		$("li").removeClass("active");
@@ -78,6 +53,23 @@ function navigation(){
   		$("#search_result").html("<%= escape_javascript(render partial: 'authors') %>");
   		$("li").removeClass("active");
   		$("#authors_partial").addClass("active");
+	});
+	$( "#keywords_partial" ).click(function() {
+  		$("#search_result").html("<%= escape_javascript(render partial: 'keywords') %>");
+  		$("li").removeClass("active");
+  		$("#keywords_partial").addClass("active");
+	});
+	$( "#tweets_partial" ).click(function() {
+  		$("#search_result").html("<%= escape_javascript(render partial: 'tweets') %>");
+  		$("li").removeClass("active");
+  		$("#tweets_partial").addClass("active");
+	});
+	$( "#diffbot_search_button" ).click(function() {
+		diffbot = true;
+		reset_search();
+		$("li").removeClass("active");
+		$("#articles_partial").addClass("active");
+  		$("#search_result").html("<%= escape_javascript(render partial: 'articles') %>");
 	});
 }
 

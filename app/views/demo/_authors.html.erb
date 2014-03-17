@@ -1,5 +1,6 @@
 <div class="page-header">
 	<h1>Authors found: <em>17</em>
+		<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="in the articles"><em>i</em></span>
 		<div class="btn-group pull-right">
 		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -46,13 +47,18 @@
         	
         </div>
 	</div>
-	<div class="col-md-6"><div id="tags-donut"></div></div>
+	<div class="col-md-6"><div id="authors-donut"></div></div>
 
 </div>
 <script>
 
+$(document).ready(function() {
+
+$('.badge').tooltip();
+
+
 Morris.Donut({
-  element: 'tags-donut',
+  element: 'authors-donut',
   data: [
     {label: "<%= raw author1 %>", value: 8},
     {label: "<%= raw author2 %>", value: 7},
@@ -68,5 +74,5 @@ Morris.Donut({
   	"#FFC768"
   ],
 });
-
+})
 </script>

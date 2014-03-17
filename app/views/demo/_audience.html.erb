@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="page-header">
+		<h1>Audience
+			<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="over the Web"><em>i</em></span>
+		</h1>
+		<div class="graph-container">
+			<div id="audience-line" class="graph"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() {
+
+$('.badge').tooltip();
+
+var d1 = new Date();
+d1.setHours(0,0,0,0)
+d1.setDate(d1.getDate() - 7);
+
+Morris.Line({
+  element: 'audience-line',
+  data: [
+    { x: d1.getTime(), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: Math.floor((Math.random()*40)+1),  b: Math.floor((Math.random()*40)+1), c: Math.floor((Math.random()*40)+1), d: Math.floor((Math.random()*40)+1), e: Math.floor((Math.random()*40)+1) },
+    { x: d1.setDate(d1.getDate() + 1), a: 5, b: 10, c: 15, d: 20, e: 30 }
+  ],
+  xkey: 'x',
+  dateFormat: function (x) { return ""; },
+  ykeys: ['e'],
+  labels: ['Keyword'],
+  hideHover: 'auto',
+  
+  lineColors: ["#F0AD4E"],
+});
+
+});
+
+</script>

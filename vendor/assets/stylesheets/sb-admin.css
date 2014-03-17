@@ -32,6 +32,24 @@
     border-bottom: 1px solid #e7e7e7;
 }
 
+#side-menu > li > a {
+	color: #777777;
+}
+
+#side-menu > li > a:hover,
+#side-menu > li > a:focus {
+  color: #333333;
+}
+
+#side-menu > .active > a,
+#side-menu > .active > a:hover,
+#side-menu > .active > a:focus {
+  color: #ffffff;
+  background-color: #F0AD4E;
+}
+
+
+
 /* Navigation */
 
 /* ------------------------------- */
@@ -46,9 +64,22 @@
     margin-right: 15px;
 }
 
+
 .navbar-top-links li a {
     padding: 15px;
     min-height: 50px;
+    color: #777777;
+}
+
+.navbar-top-links li a:hover,
+.navbar-top-links li a:focus {
+    padding: 15px;
+    min-height: 50px;
+    color: #333333;
+}
+
+.navbar-top-links .caret {
+	border-top-color: #777777;
 }
 
 .navbar-top-links .dropdown-menu li {

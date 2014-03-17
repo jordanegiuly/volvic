@@ -1,23 +1,17 @@
-<div class="container theme-showcase" role="main">
 
-	<div class="jumbotron">
-		<h1>Media page</h1>
-		<p>This page shows all the analytics available for a media.</p>
+<%= render partial: 'sidebar', locals: { link: "brand" } %>
+
+<div id="page-wrapper">
+	<div id="content_partial" class="container">
+	<%= render partial: "audience" %>
+	<%= render partial: "authors" %>
+	<%= render partial: "keywords" %>
 	</div>
-	
-	<%= render partial: 'navpills', locals: { pills: ["authors", "keywords", "brands", "audience"] } %>
-
-	<div id="content_partial">
-		<%= render partial: "authors" %>
-	</div>
-
 </div>
 
 <script>
 $(document).ready(function() {
-  	$(".navbar li").removeClass("active");
-  	$("#navbar_media").addClass("active");
-  	$("#authors_partial").addClass("active");
+	$("#medias_partial").addClass("active");
 });
 
 </script>

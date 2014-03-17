@@ -2,13 +2,49 @@
 <div id="top" class="header">
     <div class="vert-text">
         <h1>Press Tracker</h1>
-        <h3>Enter a brand name or a #tag</h3>
+        <br />
+        <br />
+        <br />
+        
+        <div class="row">
+	        <div class="col-md-4 col-md-offset-4 text-center">
+	            <h2>You are</h2>
+	            <br />
+	        </div>
+	        
+        </div>
 		
-		<%= form_tag("twitter_api/search", method: "get", :class =>"navbar-form") do %>		  
-		  <div class="form-group">
-		  <%= text_field_tag :search_tag, "", class: "form-control", placeholder: "#MyBrand" %>
-		  </div>
-		  <%= submit_tag "Search !", class: "btn btn-warning" %>
-		<% end %>
+		<div class="row">
+            <div class="col-md-2 col-md-offset-3 text-center">
+                <div class="service-item">
+                    <a href="/demo/brand">
+                    <i class="service-icon" style="border-color: #BD7A1B;">
+                    	<span class="glyphicon glyphicon-bullhorn" style="color: #333333;"></span>
+                    </i>
+                    </a>
+                    <h4> A brand</h4>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <div class="service-item">
+					<a href="#">
+                    <i class="service-icon" style="border-color: #BD7A1B;">
+                    	<span class="glyphicon glyphicon-font" style="color: #333333;"></span>
+                    </i>
+                    </a>
+                    <h4>A media</h4>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <div class="service-item">
+                    <a href="#">
+                    <i class="service-icon" style="border-color: #BD7A1B;">
+                    	<span class="glyphicon glyphicon-user" style="color: #333333;"></span>
+                    </i>
+                    </a>
+                    <h4>An author</h4>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

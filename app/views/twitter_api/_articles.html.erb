@@ -1,7 +1,6 @@
 
 <div class="page-header">
 	<h1>Articles found: <em id="articles_count">loading...</em>
-		
 		<button id="order_by_relevance_button" type="button" class="btn btn-default pull-right disabled" data-toggle="tooltip" data-placement="top" title="Order by relevance" style="margin-top: 3px;">
 			<span class="glyphicon glyphicon-chevron-up"></span>
 		</button>
@@ -45,6 +44,7 @@ $(document).ready(function() {
   		order_articles_by_relevance();
   		$("#order_by_relevance_button").addClass( "disabled" );
 	});
+
 	display_articles();
 });
 
@@ -65,6 +65,7 @@ function display_articles(){
 		for(var k in articles) {
 			display_article(articles[k]["data"]);
 		}
+		$('#articles_count').html(articles_count);
 		update_progress_bar(short_urls_count, processed_articles);
 		$('#articles_progress-bar').attr('class', 'progress-bar progress-bar-success');
 		$('#articles_progress-bar').parent().removeClass("active");

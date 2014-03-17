@@ -1,0 +1,85 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+
+    <div class="sidebar-collapse" style="height: 0px;">
+
+        <ul class="nav" id="side-menu">
+        	<li class="sidebar-search">
+            	<form accept-charset="UTF-8" action="/twitter_api/search" class="" role="search" method="get">
+                    <div class="input-group custom-search-form">
+                    <input type="text" name="search_tag" class="form-control" placeholder="#search">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                    </div>
+                 </form>
+                <!-- /input-group -->
+            </li>
+            
+            <li id="articles_partial">
+                <a href="<%= link %>">Articles</a>
+            </li>
+            <li id="keywords_partial">
+                <a href="<%= link %>">Keywords</a>
+           </li>
+            <li id="medias_partial">
+                <a href="<%= link %>">Medias</a>
+            </li>
+            <li id="authors_partial">
+                <a href="<%= link %>">Authors</a>
+            </li>
+            <li id="tweets_partial">
+                <a href="<%= link %>">Tweets</a>
+            </li>
+        </ul>
+        <!-- /#side-menu -->
+    </div>
+    <!-- /.sidebar-collapse -->
+</nav>
+
+
+<script>
+
+$(document).ready(function() {
+	navigation();
+});
+
+function navigation(){
+	$( "#articles_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/articles') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#articles_partial").addClass("active");
+	});
+	$( "#medias_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/medias') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#medias_partial").addClass("active");
+	});
+	$( "#authors_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/authors') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#authors_partial").addClass("active");
+	});		
+	$( "#keywords_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/keywords') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#keywords_partial").addClass("active");
+	});
+	$( "#tweets_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/tweets') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#tweets_partial").addClass("active");
+	});
+	$( "#brands_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/brands') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#brands_partial").addClass("active");
+	});
+	$( "#audience_partial" ).click(function() {
+  		$("#content_partial").html("<%= escape_javascript(render partial: 'demo/audience') %>");
+  		$("#side-menu li").removeClass("active");
+  		$("#audience_partial").addClass("active");
+	});
+}
+</script>

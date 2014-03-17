@@ -1,5 +1,6 @@
 <div class="page-header">
 	<h1>Medias found: <em>20</em>
+		<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="in the articles"><em>i</em></span>
 		<div class="btn-group pull-right">
 		  <button type="button" class="btn btn-default disabled">Export to CSV</button>
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -40,18 +41,56 @@
         	
         </div>
 	</div>
-	<div class="col-md-6"><div id="tags-donut"></div></div>
+	<div class="col-md-6"><div id="medias-donut"></div></div>
 
 </div>
 
 
-<h1 class="page-header">Suggested medias</h1>
+<h1 class="page-header">Suggested medias
+<span class="badge" style="vertical-align:middle;" data-toggle="tooltip" title="based on your keywords"><em>i</em></span>
+</h1>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="list-group" style="margin-top: 20px;">
+  			<a href="/demo/media" class="list-group-item">
+  				<h4 style="color: #D79435;">Tech Crunch Fr</h4>
+  			</a>
+  			<a href="/demo/media" class="list-group-item">
+  				<h4 style="color: #E3A041;">Le Monde</h4>
+  			</a>
+  			<a href="/demo/media" class="list-group-item">
+  				<h4 style="color: #F0AD4E;">Rude Baguette</h4>
+  			</a>
+  			<a href="/demo/media" class="list-group-item">
+  				<h4 style="color: #FDBA5B;">Journal du Net</h4>
+  			</a>
+  			<a href="/demo/media" class="list-group-item">
+  				<h4 style="color: #FFC768;">Maddyness</h4>
+  			</a>
+		</div>
+		
+		<button class="btn btn-default btn-lg pull-right disabled" type="button">
+    		View all suggested medias <i class="fa fa-arrow-circle-right"></i>
+  		</button>
+		<div class="text-right">
+        	
+        </div>
+	</div>
+	<div class="col-md-6"></div>
+
+</div>
+
 
 
 <script>
 
+$(document).ready(function() {
+
+$('.badge').tooltip();
+
 Morris.Donut({
-  element: 'tags-donut',
+  element: 'medias-donut',
   data: [
     {label: "Huffington Post", value: 45},
     {label: "Presse Citron", value: 30},
@@ -67,5 +106,5 @@ Morris.Donut({
   	"#FFC768"
   ],
 });
-
+})
 </script>
